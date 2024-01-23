@@ -14,6 +14,8 @@ namespace BlazorShop.Web.Services
             this.httpClient = httpClient;
         }
 
+        public event Action<int> OnCarrinhoCompraChanged;
+
         public async Task<CarrinhoItemDto> AdicionaItem(CarrinhoItemAdicionaDto carrinhoItemAdicionaDto)
         {
             try
@@ -103,6 +105,13 @@ namespace BlazorShop.Web.Services
             catch (Exception)
             {
                 throw;
+            }
+        }
+        public void RaiseEventOnCarrinhoCompraChanged(int totalQuantidade)
+        {
+            if (OnCarrinhoCompraChanged != null) 
+            {
+                OnCarrinhoCompraChanged.Invoke(totalQuantidade);
             }
         }
     }
