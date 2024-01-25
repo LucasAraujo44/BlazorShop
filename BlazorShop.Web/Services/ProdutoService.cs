@@ -56,5 +56,56 @@ namespace BlazorShop.Web.Services
 				throw;
             }
         }
-	}
+
+        public async Task<IEnumerable<CategoriaDto>> GetCategorias()
+        {
+            try 
+            {
+                var response = await _httpCliente.GetAsync($"api/Produtos/GetCategorias");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode ==  System.Net.HttpStatusCode.NoContent)
+                    {
+                        return Enumerable.Empty<CategoriaDto>();
+                    }
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<CategoriaDto>>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"http Status Code : {response.StatusCode} - {message}");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public  async Task<IEnumerable<ProdutoDto>> GetItensPorCategoria(int categotiaId)
+        {
+            try 
+            {
+                var response = await _httpCliente.GetAsync($"api/Produtos/{categotiaId}/GetItensPorCategoria");
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return Enumerable.Empty<ProdutoDto>();
+                    }
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<ProdutoDto>>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"http Status Code : {response.StatusCode} - {message}");
+                }
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
+        }
+    }
 }
